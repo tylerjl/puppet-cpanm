@@ -4,7 +4,7 @@ Puppet::Type.type(:package).provide :cpanm, :parent => Puppet::Provider::Package
 
   desc 'Install CPAN modules via `cpanm`'
 
-  has_feature :installable, :upgradeable
+  has_feature :installable, :upgradeable, :versionable
 
   confine  :exists => ['/usr/bin/cpanm', '/usr/bin/perldoc']
   commands :cpanm  => '/usr/bin/cpanm'
@@ -48,7 +48,7 @@ Puppet::Type.type(:package).provide :cpanm, :parent => Puppet::Provider::Package
 
   # Install the module
   def install
-    cpanm @resource[:name]
+    cpanm "#{@resource[:name]}#{('@' + @resource[:ensure]) unless @resource[:ensure].is_a? Symbol}"
   end
 
   # Return the latest available version of a particular module
